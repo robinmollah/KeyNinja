@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KeyNinja | Keyboard is the new magic wand</title>
+</head>
+<body>
+<p id="text">Hello world</p>
+<code id="input" contenteditable="true" style="background-color: #555;display: inline-block;
+    min-width: 150px;padding: 8px; color: #eee;">
+    <b>Write Here</b>
+</code>
+<script>
+    var text = document.getElementById("text");
+    var code = document.getElementById("input");
+    var index = 0;
+    code.addEventListener("keydown", function(event){
+        console.log(event.key);
+        if(event.key == "Backspace" && index > 0){
+            console.log("Deleting" + --index);
+            return;
+        }
+        if(!event.key.match(/^.$/i)){
+            return;
+        }
+        if(text.innerText.charAt(index++) == event.key){
+            console.log("Matched");
+        } else {
+            text.style.backgroundColor = "red";
+            setTimeout(function(){
+                text.style.backgroundColor = "white";
+            }, 200);
+        }
+    });
+    code.addEventListener("focusin", function(event){
+        index = 0;
+        code.innerText = "";
+    });
+    code.addEventListener("focusout", function(event){
+        code.innerText = "Write here";
+    });
+</script>
+</body>
+</html>
