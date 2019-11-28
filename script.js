@@ -1,5 +1,6 @@
 var text = document.getElementById("text");
 var code = document.getElementById("input");
+
 var elapsedTimeView = document.getElementById("elapsed_time");
 var typingSpeedView = document.getElementById("typing_speed");
 var mistakeNumberView = document.getElementById('mistake_number');
@@ -18,6 +19,8 @@ var textToType = text.innerText;
 code.addEventListener("keydown", function(event){
     console.log(event.key);
     if(event.key == "Backspace" && index > 0){ // Backspace
+        index--;
+        underline();
         return;
     }
     if(!event.key.match(/^.$/i)){ // Invalid character
@@ -53,14 +56,16 @@ function init(){
 }
 
 function underline(){
-    text.innerHTML = text.innerText.substring(0, index) + "<u>" + text.innerText.substring(index, index+1) +
-        "</u>" + text.innerText.substring(index+1);
+    text.innerHTML = text.innerText.substring(0, index) + "<span class='currentChar'>" + text.innerText.substring(index, index+1) +
+        "</span>" + text.innerText.substring(index+1);
 }
 
 function updateTiming(){
-    var elapsedTime = ((Date.now() / 1000) - startTime) | 0
+    var elapsedTime = ((Date.now() / 1000) - startTime) | 0;
     elapsedTimeView.innerText = elapsedTime;
-    typingSpeedView.innerText = (totalKeyPressed * 5 * 60) / elapsedTime | 0;
+    var typedWord = totalKeyPressed / 5;
+    var elapsedMinute = elapsedTime / 60;
+    typingSpeedView.innerText = typedWord / elapsedMinute | 0;
     mistakeNumberView.innerText = mistake;
     mistakeRatioView.innerText = mistake / (totalKeyPressed / 5); // error per word
     totalKeyPressedView.innerText = totalKeyPressed;
